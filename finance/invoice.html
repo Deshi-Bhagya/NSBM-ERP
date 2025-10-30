@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Semester Fee Management | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* SEARCH & FILTER */
+    .search-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* INVOICE TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .status-paid { background: #d4edda; color: #155724; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-late { background: #f8d7da; color: #721c24; }
+
+    /* ACTIONS */
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-view { background: #6c757d; color: white; }
+    .btn-remind { background: var(--warning); color: white; }
+    .btn-receipt { background: var(--success); color: white; }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 600px;
+      box-shadow: var(--shadow);
+    }
+    .modal-close {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .search-bar { flex-direction: column; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="invoice.html" class="active">Fee Management</a></li>
+          <li><a href="scholarships.html">Scholarships</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:0.5rem; color:#222;">Semester Fee Management</h1>
+    <p style="color:#555; margin-bottom:1.5rem;">Generate bills, track payments, apply late fees, and issue receipts.</p>
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search by Student ID or Name..." />
+      <button class="btn-primary" onclick="searchStudents()">Search</button>
+    </div>
+
+    <!-- INVOICE TABLE -->
+    <table id="invoice-table">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Semester</th>
+          <th>Due Date</th>
+          <th>Amount</th>
+          <th>Late Fee</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODAL: Invoice Details -->
+  <div class="modal" id="invoice-modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h3>Semester Invoice - <span id="modal-student"></span></h3>
+      <p><strong>ID:</strong> <span id="modal-id"></span></p>
+      <p><strong>Semester:</strong> <span id="modal-semester"></span></p>
+      <p><strong>Due Date:</strong> <span id="modal-due"></span></p>
+      <hr>
+      <p><strong>Base Fee:</strong> LKR <span id="modal-base">0</span></p>
+      <p><strong>Late Fee:</strong> LKR <span id="modal-late">0</span></p>
+      <p style="font-size:1.1rem; font-weight:700; color:var(--primary);">
+        <strong>Total Due:</strong> LKR <span id="modal-total">0</span>
+      </p>
+      <button class="btn-receipt" onclick="generateReceipt()">Generate Receipt</button>
+      <button class="btn-remind" style="margin-left:1rem;" onclick="sendReminder()">Send Reminder</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Sample invoices
+    let invoices = [
+      { id: "S12345", name: "Kamal Perera", semester: "Sem 1, 2024", due: "2024-12-15", base: 75000, late: 0, status: "paid" },
+      { id: "S12346", name: "Nimali Silva", semester: "Sem 1, 2024", due: "2024-12-10", base: 75000, late: 5000, status: "late" },
+      { id: "S12347", name: "Sunil Jayasinghe", semester: "Sem 1, 2024", due: "2024-12-20", base: 75000, late: 0, status: "pending" }
+    ];
+
+    let currentInvoice = null;
+
+    // Load table
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'finance') {
+        alert('Access denied. Finance staff only.');
+        location.href = '../index.html';
+        return;
+      }
+      renderInvoices();
+    };
+
+    // Render invoices
+    function renderInvoices(filter = '') {
+      const tbody = document.querySelector('#invoice-table tbody');
+      const filtered = invoices.filter(inv => 
+        inv.id.toLowerCase().includes(filter) || 
+        inv.name.toLowerCase().includes(filter)
+      );
+
+      tbody.innerHTML = filtered.map(inv => `
+        <tr>
+          <td>${inv.id}</td>
+          <td>${inv.name}</td>
+          <td>${inv.semester}</td>
+          <td>${new Date(inv.due).toLocaleDateString()}</td>
+          <td>LKR ${inv.base.toLocaleString()}</td>
+          <td>LKR ${inv.late.toLocaleString()}</td>
+          <td><span class="badge status-${inv.status}">${inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}</span></td>
+          <td>
+            <button class="btn-sm btn-view" onclick="openInvoice('${inv.id}')">View</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Search
+    function searchStudents() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      renderInvoices(query);
+    }
+
+    // Open modal
+    function openInvoice(id) {
+      const inv = invoices.find(i => i.id === id);
+      if (!inv) return;
+
+      currentInvoice = inv;
+      document.getElementById('modal-student').textContent = inv.name;
+      document.getElementById('modal-id').textContent = inv.id;
+      document.getElementById('modal-semester').textContent = inv.semester;
+      document.getElementById('modal-due').textContent = new Date(inv.due).toLocaleDateString();
+      document.getElementById('modal-base').textContent = inv.base.toLocaleString();
+      document.getElementById('modal-late').textContent = inv.late.toLocaleString();
+      document.getElementById('modal-total').textContent = (inv.base + inv.late).toLocaleString();
+
+      document.getElementById('invoice-modal').classList.add('show');
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('invoice-modal').classList.remove('show');
+    }
+
+    // Generate receipt
+    function generateReceipt() {
+      alert(`Receipt generated for ${currentInvoice.id}! (Printable PDF ready)`);
+      closeModal();
+    }
+
+    // Send reminder
+    function sendReminder() {
+      alert(`Payment reminder sent to ${currentInvoice.name} via email & SMS.`);
+    }
+
+    // Close on outside click
+    window.onclick = function(e) {
+      const modal = document.getElementById('invoice-modal');
+      if (e.target === modal) closeModal();
+    };
+  </script>
+
+</body>
+</html>
