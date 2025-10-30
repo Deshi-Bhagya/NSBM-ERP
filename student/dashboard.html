@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* CARDS */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* PROFILE */
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .profile-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: #666;
+    }
+
+    /* ATTENDANCE */
+    .attendance-bar {
+      background: #eee;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    .attendance-fill {
+      height: 100%;
+      background: var(--success);
+      width: 92%;
+    }
+
+    /* RESULTS TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 0.6rem 0;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    th { color: var(--primary); font-weight: 600; }
+
+    /* NOTIFICATIONS */
+    .notification {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .notification:last-child { border: none; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="dashboard.html" class="active">Dashboard</a></li>
+          <li><a href="courses.html">Courses</a></li>
+          <li><a href="payment.html">Fees</a></li>
+	  <li><a href="results.html">Results</a></li>
+          <li><a href="profile.html">Profile</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:1.5rem; color:#222;">Welcome back, <span id="student-name">Student</span>!</h1>
+
+    <div class="grid">
+      <!-- PROFILE & ID -->
+      <div class="card">
+        <h3 class="card-title"><i class="fas fa-user"></i> Student Profile</h3>
+        <div class="profile-info">
+          <div class="profile-img"><i class="fas fa-user"></i></div>
+          <div>
+            <strong id="profile-id">S12345</strong><br>
+            <span id="profile-program">BSc in Computing</span>
+          </div>
+        </div>
+        <p><strong>Email:</strong> <span id="profile-email">s12345@nsbm.ac.lk</span></p>
+        <p><strong>Status:</strong> <span class="badge badge-approved">Active</span></p>
+        <button class="btn btn-sm" style="background:var(--primary); color:white; margin-top:1rem;" onclick="alert('ID Card ready for print!')">
+          View ID Card
+        </button>
+      </div>
+
+      <!-- ATTENDANCE -->
+      <div class="card">
+        <h3 class="card-title"><i class="fas fa-user-check"></i> Attendance</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong>92.5%</strong><br>
+            <small>Overall</small>
+          </div>
+          <div style="flex:1; margin:0 1rem;">
+            <div class="attendance-bar">
+              <div class="attendance-fill"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1rem; font-size:0.9rem;">
+          <div>CS101: <strong>95%</strong></div>
+          <div>MA101: <strong>90%</strong></div>
+        </div>
+      </div>
+
+      <!-- EXAM RESULTS -->
+      <div class="card">
+        <h3 class="card-title"><i class="fas fa-file-alt"></i> Recent Results</h3>
+        <table id="results-table">
+          <tr><th>Course</th><th>Grade</th></tr>
+          <tr><td>CS101</td><td><strong>A</strong></td></tr>
+          <tr><td>MA101</td><td><strong>B+</strong></td></tr>
+          <tr><td>PH101</td><td><strong>A-</strong></td></tr>
+        </table>
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="card">
+        <h3 class="card-title"><i class="fas fa-chart-line"></i> Academic Progress</h3>
+        <p><strong>GPA:</strong> 3.65</p>
+        <p><strong>Credits Completed:</strong> 45 / 120</p>
+        <div style="margin-top:1rem;">
+          <small style="color:var(--success);">On track for graduation in 2027</small>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="card" style="grid-column: span 2;">
+        <h3 class="card-title"><i class="fas fa-bell"></i> Notifications</h3>
+        <div id="notifications">
+          <div class="notification"><i class="fas fa-info-circle" style="color:var(--primary);"></i> Course registration for Spring 2024 opens on Dec 1.</div>
+          <div class="notification"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i> Fee payment due: Dec 15, 2023.</div>
+          <div class="notification"><i class="fas fa-check-circle" style="color:var(--success);"></i> Your ID card is ready for collection.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Load student data
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      const userID = localStorage.getItem('userID');
+
+      if (!userID || role !== 'student') {
+        alert('Access denied. Redirecting to login...');
+        location.href = '../index.html';
+        return;
+      }
+
+      document.getElementById('student-name').textContent = userID;
+      document.getElementById('profile-id').textContent = userID;
+      document.getElementById('profile-email').textContent = userID.toLowerCase() + '@nsbm.ac.lk';
+    };
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fee Payment | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* CARDS */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* INVOICE TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .total-row {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+
+    /* PAYMENT FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* BUTTONS */
+    .btn-success {
+      background: var(--success);
+      color: white;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    /* RECEIPT */
+    .receipt {
+      display: none;
+      background: #d4edda;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      margin-top: 1.5rem;
+      text-align: center;
+      border: 1px solid #c3e6cb;
+    }
+    .receipt.show { display: block; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="courses.html">Courses</a></li>
+          <li><a href="payment.html" class="active">Fees</a></li>
+	  <li><a href="results.html">Results</a></li>
+          <li><a href="profile.html">Profile</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:1rem; color:#222;">Fee Payment</h1>
+    <p style="color:#555; margin-bottom:1.5rem;">Complete payment for registered courses. Receipt will be generated upon success.</p>
+
+    <div class="card">
+      <h3 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Invoice Summary</h3>
+      <table id="invoice-table">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Description</th>
+            <th>Fee (LKR)</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-body">
+          <!-- Filled by JS -->
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="2">Total Amount</td>
+            <td id="total-amount">LKR 0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div style="margin-top:2rem;">
+        <h3 class="card-title"><i class="fas fa-credit-card"></i> Payment Details</h3>
+        <div class="form-grid">
+          <div>
+            <label style="display:block; margin-bottom:0.5rem; font-weight:500;">Card Number</label>
+            <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" />
+          </div>
+          <div>
+            <label style="display:block; margin-bottom:0.5rem; font-weight:500;">Cardholder Name</label>
+            <input type="text" placeholder="Full Name" />
+          </div>
+          <div>
+            <label style="display:block; margin-bottom:0.5rem; font-weight:500;">Expiry Date</label>
+            <input type="text" placeholder="MM/YY" maxlength="5" />
+          </div>
+          <div>
+            <label style="display:block; margin-bottom:0.5rem; font-weight:500;">CVV</label>
+            <input type="text" placeholder="123" maxlength="3" />
+          </div>
+        </div>
+
+        <button class="btn-success" onclick="processPayment()">
+          Pay Now
+        </button>
+      </div>
+
+      <!-- RECEIPT -->
+      <div id="receipt" class="receipt">
+        <h3><i class="fas fa-check-circle"></i> Payment Successful!</h3>
+        <p>Transaction ID: <strong id="tx-id">TXN123456789</strong></p>
+        <p>Amount Paid: <strong id="receipt-amount">LKR 0.00</strong></p>
+        <p>Date: <span id="receipt-date"></span></p>
+        <button onclick="window.print()" style="background:var(--primary); color:white; padding:0.6rem 1.2rem; border:none; border-radius:8px; margin-top:1rem; cursor:pointer;">
+          Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Course fees (per credit)
+    const feePerCredit = 25000;
+
+    // Load selected courses
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'student') {
+        alert('Access denied.');
+        location.href = '../index.html';
+        return;
+      }
+
+      const selection = JSON.parse(localStorage.getItem('courseSelection') || '[]');
+      if (selection.length === 0) {
+        alert('No courses selected. Redirecting...');
+        location.href = 'courses.html';
+        return;
+      }
+
+      renderInvoice(selection);
+    };
+
+    // Render invoice
+    function renderInvoice(codes) {
+      const tbody = document.getElementById('invoice-body');
+      let total = 0;
+
+      const courseMap = {
+        "CS101": { name: "Introduction to Computer Science", credits: 3 },
+        "CS201": { name: "Data Structures & Algorithms", credits: 4 },
+        "MA101": { name: "Calculus I", credits: 3 },
+        "MA201": { name: "Linear Algebra", credits: 3 }
+      };
+
+      tbody.innerHTML = codes.map(code => {
+        const course = courseMap[code];
+        const fee = course.credits * feePerCredit;
+        total += fee;
+        return `
+          <tr>
+            <td>${code}</td>
+            <td>${course.name} (${course.credits} credits)</td>
+            <td>LKR ${fee.toLocaleString()}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('total-amount').textContent = `LKR ${total.toLocaleString()}`;
+      window.totalDue = total;
+    }
+
+    // Process payment
+    function processPayment() {
+      const card = document.querySelector('input[placeholder*="Card Number"]').value;
+      if (!card || card.replace(/\s/g, '').length < 16) {
+        alert('Please enter a valid card number.');
+        return;
+      }
+
+      // Simulate processing
+      setTimeout(() => {
+        const receipt = document.getElementById('receipt');
+        receipt.classList.add('show');
+
+        document.getElementById('tx-id').textContent = 'TXN' + Date.now();
+        document.getElementById('receipt-amount').textContent = `LKR ${window.totalDue.toLocaleString()}`;
+        document.getElementById('receipt-date').textContent = new Date().toLocaleDateString();
+
+        // Save payment status
+        localStorage.setItem('paymentStatus', 'completed');
+        localStorage.setItem('paymentAmount', window.totalDue);
+        localStorage.setItem('paymentDate', new Date().toISOString());
+
+        alert('Payment successful! Receipt generated.');
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>
