@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admission Dashboard | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #d4edda; color: #155724; }
+    .badge-rejected { background: #f8d7da; color: #721c24; }
+
+    /* ACTION BUTTONS */
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-approve { background: var(--success); color: white; }
+    .btn-reject { background: var(--danger); color: white; }
+    .btn-view { background: #6c757d; color: white; }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 500px;
+      box-shadow: var(--shadow);
+    }
+    .modal-close {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="dashboard.html" >Admin Panel</a></li>
+          <li><a href="users.html">User Management</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="admission.html" class="active">Admission</a></li>
+          <li><a href="verify.html">Verify Documents</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:0.5rem; color:#222;">Admission Dashboard</h1>
+    <p style="color:#555; margin-bottom:2rem;">Manage new student applications and document verification.</p>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="total-apps">0</div>
+        <div class="stat-label">Total Applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pending-apps">0</div>
+        <div class="stat-label">Pending Review</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="approved-apps">0</div>
+        <div class="stat-label">Approved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="rejected-apps">0</div>
+        <div class="stat-label">Rejected</div>
+      </div>
+    </div>
+
+    <!-- APPLICATIONS TABLE -->
+    <div class="card">
+      <h3 style="margin-bottom:1rem; color:var(--primary); font-weight:600;">
+        <i class="fas fa-users"></i> New Student Applications
+      </h3>
+      <table id="applications-table">
+        <thead>
+          <tr>
+            <th>App ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Program</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL: Document Verification -->
+  <div class="modal" id="verify-modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h3>Verify Documents - <span id="modal-name"></span></h3>
+      <p><strong>Email:</strong> <span id="modal-email"></span></p>
+      <p><strong>Program:</strong> <span id="modal-program"></span></p>
+
+      <div style="margin:2rem 0;">
+        <h4>Uploaded Documents</h4>
+        <ul id="document-list" style="margin-top:0.5rem; padding-left:1.2rem;">
+          <!-- Filled by JS -->
+        </ul>
+      </div>
+
+      <div style="display:flex; gap:1rem;">
+        <button class="btn-sm btn-approve" onclick="approveApplication()">Approve</button>
+        <button class="btn-sm btn-reject" onclick="rejectApplication()">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Sample applications
+    let applications = [
+      { id: "APP001", name: "Kamal Perera", email: "kamal@example.com", program: "BSc Computing", status: "pending", docs: ["OL Certificate", "AL Certificate", "Birth Certificate"] },
+      { id: "APP002", name: "Nimali Silva", email: "nimali@example.com", program: "BSc Management", status: "pending", docs: ["OL Certificate", "AL Certificate"] },
+      { id: "APP003", name: "Sunil Jayasinghe", email: "sunil@example.com", program: "BSc Engineering", status: "approved", docs: ["OL Certificate", "AL Certificate", "Passport"] },
+      { id: "APP004", name: "Amara Gunawardena", email: "amara@example.com", program: "BSc Computing", status: "rejected", docs: ["OL Certificate"] }
+    ];
+
+    let currentAppId = null;
+
+    // Load dashboard
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'admin') {
+        alert('Access denied. Admin staff only.');
+        location.href = '../index.html';
+        return;
+      }
+
+      renderApplications();
+      updateStats();
+    };
+
+    // Render table
+    function renderApplications() {
+      const tbody = document.querySelector('#applications-table tbody');
+      tbody.innerHTML = applications.map(app => `
+        <tr>
+          <td>${app.id}</td>
+          <td>${app.name}</td>
+          <td>${app.email}</td>
+          <td>${app.program}</td>
+          <td><span class="badge badge-${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
+          <td>
+            ${app.status === 'pending' ? `
+              <button class="btn-sm btn-view" onclick="openVerifyModal('${app.id}')">Verify</button>
+            ` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update stats
+    function updateStats() {
+      const total = applications.length;
+      const pending = applications.filter(a => a.status === 'pending').length;
+      const approved = applications.filter(a => a.status === 'approved').length;
+      const rejected = applications.filter(a => a.status === 'rejected').length;
+
+      document.getElementById('total-apps').textContent = total;
+      document.getElementById('pending-apps').textContent = pending;
+      document.getElementById('approved-apps').textContent = approved;
+      document.getElementById('rejected-apps').textContent = rejected;
+    }
+
+    // Open modal
+    function openVerifyModal(id) {
+      const app = applications.find(a => a.id === id);
+      if (!app) return;
+
+      currentAppId = id;
+      document.getElementById('modal-name').textContent = app.name;
+      document.getElementById('modal-email').textContent = app.email;
+      document.getElementById('modal-program').textContent = app.program;
+
+      const docList = document.getElementById('document-list');
+      docList.innerHTML = app.docs.map(doc => `<li>${doc}</li>`).join('');
+
+      document.getElementById('verify-modal').classList.add('show');
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('verify-modal').classList.remove('show');
+      currentAppId = null;
+    }
+
+    // Approve
+    function approveApplication() {
+      if (!currentAppId) return;
+      const app = applications.find(a => a.id === currentAppId);
+      app.status = 'approved';
+      closeModal();
+      renderApplications();
+      updateStats();
+      alert(`Application ${currentAppId} approved! Student can proceed to enrollment.`);
+    }
+
+    // Reject
+    function rejectApplication() {
+      if (!currentAppId) return;
+      const app = applications.find(a => a.id === currentAppId);
+      app.status = 'rejected';
+      closeModal();
+      renderApplications();
+      updateStats();
+      alert(`Application ${currentAppId} rejected. Student notified.`);
+    }
+
+    // Close modal on outside click
+    window.onclick = function(e) {
+      const modal = document.getElementById('verify-modal');
+      if (e.target === modal) closeModal();
+    };
+  </script>
+
+</body>
+</html>

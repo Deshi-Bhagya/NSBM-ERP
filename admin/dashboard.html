@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* GRIEVANCE TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-inprogress { background: #cce5ff; color: #004085; }
+    .badge-resolved { background: #d4edda; color: #155724; }
+
+    /* ACTIONS */
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-assign { background: var(--warning); color: white; }
+    .btn-view { background: #6c757d; color: white; }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 500px;
+      box-shadow: var(--shadow);
+    }
+    .modal-close {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    /* EXPORT BUTTON */
+    .export-btn {
+      background: var(--success);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1.5rem;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="dashboard.html" class="active">Admin Panel</a></li>
+          <li><a href="users.html">User Management</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="admission.html">Admission</a></li>
+          <li><a href="verify.html">Verify Documents</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:0.5rem; color:#222;">Admin Control Panel</h1>
+    <p style="color:#555; margin-bottom:2rem;">Monitor system, manage grievances, generate reports.</p>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="total-users">1,245</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="active-sessions">89</div>
+        <div class="stat-label">Active Sessions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pending-grievances">7</div>
+        <div class="stat-label">Pending Grievances</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="system-uptime">99.9%</div>
+        <div class="stat-label">System Uptime</div>
+      </div>
+    </div>
+
+    <!-- GRIEVANCE TABLE -->
+    <h3 style="margin-bottom:1rem; color:var(--primary);">
+      <i class="fas fa-exclamation-triangle"></i> Student Grievances
+    </h3>
+    <table id="grievance-table">
+      <thead>
+        <tr>
+          <th>Ticket ID</th>
+          <th>Student</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+
+    <button class="export-btn" onclick="exportReport()">
+      Export All Grievances (CSV)
+    </button>
+  </div>
+
+  <!-- MODAL: Assign Grievance -->
+  <div class="modal" id="assign-modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h3>Assign Grievance - <span id="modal-ticket"></span></h3>
+      <p><strong>Student:</strong> <span id="modal-student"></span></p>
+      <p><strong>Issue:</strong> <span id="modal-issue"></span></p>
+
+      <div style="margin:1.5rem 0;">
+        <label>Assign To:</label>
+        <select id="assign-dept" style="width:100%; padding:0.6rem; margin-top:0.5rem; border:1.5px solid var(--border); border-radius:8px;">
+          <option value="admission">Admission Office</option>
+          <option value="finance">Finance Office</option>
+          <option value="academic">Academic Affairs</option>
+          <option value="hostel">Hostel Management</option>
+        </select>
+      </div>
+
+      <button class="btn-assign" onclick="assignGrievance()">Assign & Notify</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Sample grievances
+    let grievances = [
+      { id: "GRV001", student: "Kamal Perera", category: "Fee Dispute", date: "2025-10-25", status: "pending", issue: "Incorrect late fee applied." },
+      { id: "GRV002", student: "Nimali Silva", category: "Course Registration", date: "2025-10-24", status: "inprogress", issue: "Unable to register for CS301." },
+      { id: "GRV003", student: "Sunil Jayasinghe", category: "Hostel", date: "2025-10-23", status: "resolved", issue: "Room change request." }
+    ];
+
+    let currentTicket = null;
+
+    // Load page
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'admin') {
+        alert('Access denied. Admin only.');
+        location.href = '../index.html';
+        return;
+      }
+      renderGrievances();
+      updateStats();
+    };
+
+    // Render grievances
+    function renderGrievances() {
+      const tbody = document.querySelector('#grievance-table tbody');
+      tbody.innerHTML = grievances.map(g => `
+        <tr>
+          <td>${g.id}</td>
+          <td>${g.student}</td>
+          <td>${g.category}</td>
+          <td>${new Date(g.date).toLocaleDateString()}</td>
+          <td><span class="badge badge-${g.status}">${g.status}</span></td>
+          <td>
+            ${g.status !== 'resolved' ? `<button class="btn-sm btn-assign" onclick="openAssignModal('${g.id}')">Assign</button>` : ''}
+            <button class="btn-sm btn-view" onclick="viewDetails('${g.id}')">View</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Open assign modal
+    function openAssignModal(id) {
+      const g = grievances.find(gr => gr.id === id);
+      if (!g) return;
+
+      currentTicket = id;
+      document.getElementById('modal-ticket').textContent = g.id;
+      document.getElementById('modal-student').textContent = g.student;
+      document.getElementById('modal-issue').textContent = g.issue;
+
+      document.getElementById('assign-modal').classList.add('show');
+    }
+
+    // Assign grievance
+    function assignGrievance() {
+      const dept = document.getElementById('assign-dept').value;
+      const g = grievances.find(gr => gr.id === currentTicket);
+      g.status = 'inprogress';
+
+      alert(`Grievance ${currentTicket} assigned to ${dept.toUpperCase()} Department. Email sent.`);
+      closeModal();
+      renderGrievances();
+      updateStats();
+    }
+
+    // View details
+    function viewDetails(id) {
+      const g = grievances.find(gr => gr.id === id);
+      alert(`Ticket: ${g.id}\nStudent: ${g.student}\nIssue: ${g.issue}\nStatus: ${g.status}`);
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('assign-modal').classList.remove('show');
+      currentTicket = null;
+    }
+
+    // Update stats
+    function updateStats() {
+      const pending = grievances.filter(g => g.status === 'pending').length;
+      document.getElementById('pending-grievances').textContent = pending;
+    }
+
+    // Export CSV
+    function exportReport() {
+      let csv = 'Ticket ID,Student,Category,Date,Status,Issue\n';
+      grievances.forEach(g => {
+        csv += `${g.id},${g.student},${g.category},${g.date},${g.status},"${g.issue}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'grievances_report.csv';
+      a.click();
+    }
+
+    // Close on outside click
+    window.onclick = function(e) {
+      const modal = document.getElementById('assign-modal');
+      if (e.target === modal) closeModal();
+    };
+  </script>
+
+</body>
+</html>

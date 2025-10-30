@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document Verification | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* CARD GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 992px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* CARD */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1.1px solid var(--border);
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* DOCUMENT ITEM */
+    .doc-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      background: var(--light);
+    }
+    .doc-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .doc-icon {
+      width: 40px;
+      height: 40px;
+      background: #e9ecef;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+    .doc-actions button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-approve { background: var(--success); color: white; }
+    .btn-reject { background: var(--danger); color: white; }
+    .btn-view { background: #6c757d; color: white; }
+
+    /* OCR RESULT */
+    .ocr-result {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-family: monospace;
+      font-size: 0.9rem;
+      max-height: 150px;
+      overflow-y: auto;
+      display: none;
+    }
+    .ocr-result.show { display: block; }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="dashboard.html" >Admin Panel</a></li>
+          <li><a href="users.html">User Management</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="admission.html">Admission</a></li>
+          <li><a href="verify.html" class="active">Verify Documents</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:1rem; color:#222;">Document Verification Center</h1>
+    <p style="color:#555; margin-bottom:2rem;">Review and validate uploaded student documents with OCR assistance.</p>
+
+    <div class="grid">
+      <!-- LEFT: Student Info -->
+      <div class="card">
+        <h3 class="card-title"><i class="fas fa-user"></i> Applicant Details</h3>
+        <p><strong>Name:</strong> <span id="student-name">Kamal Perera</span></p>
+        <p><strong>App ID:</strong> <span id="app-id">APP001</span></p>
+        <p><strong>Email:</strong> <span id="student-email">kamal@example.com</span></p>
+        <p><strong>Program:</strong> <span id="student-program">BSc in Computing</span></p>
+        <p><strong>Status:</strong> <span class="badge badge-pending">Pending Verification</span></p>
+      </div>
+
+      <!-- RIGHT: Document List -->
+      <div class="card">
+        <h3 class="card-title"><i class="fas fa-file-alt"></i> Uploaded Documents</h3>
+        <div id="documents-list">
+          <!-- Filled by JS -->
+        </div>
+
+        <button class="btn-primary" onclick="finalizeVerification()">
+          Finalize Verification
+        </button>
+      </div>
+    </div>
+
+    <!-- OCR Result Panel -->
+    <div class="card" style="margin-top:2rem;">
+      <h3 class="card-title"><i class="fas fa-brain"></i> OCR Extraction Result</h3>
+      <div id="ocr-result" class="ocr-result">
+        Scanning document...<br>
+        <span style="color:var(--success);">Name: Kamal Perera</span><br>
+        <span style="color:var(--success);">DOB: 12/05/2000</span><br>
+        <span style="color:var(--warning);">Index No: 12345678 (Low confidence)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Sample documents
+    const documents = [
+      { name: "OL Certificate", type: "pdf", status: "pending", ocr: true },
+      { name: "AL Certificate", type: "image", status: "pending", ocr: true },
+      { name: "Birth Certificate", type: "pdf", status: "pending", ocr: false },
+      { name: "Passport Photo", type: "image", status: "approved", ocr: false }
+    ];
+
+    let verifiedCount = 0;
+
+    // Load page
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'admin') {
+        alert('Access denied.');
+        location.href = '../index.html';
+        return;
+      }
+
+      renderDocuments();
+      showOCRResult();
+    };
+
+    // Render document list
+    function renderDocuments() {
+      const container = document.getElementById('documents-list');
+      container.innerHTML = documents.map((doc, i) => `
+        <div class="doc-item">
+          <div class="doc-info">
+            <div class="doc-icon">
+              <i class="fas fa-${doc.type === 'pdf' ? 'file-pdf' : 'image'}"></i>
+            </div>
+            <div>
+              <strong>${doc.name}</strong><br>
+              <small>${doc.type.toUpperCase()} • ${doc.status}</small>
+            </div>
+          </div>
+          <div class="doc-actions">
+            <button class="btn-view" onclick="viewDocument(${i})">View</button>
+            ${doc.status === 'pending' ? `
+              <button class="btn-approve" onclick="approveDoc(${i})">Approve</button>
+              <button class="btn-reject" onclick="rejectDoc(${i})">Reject</button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // View document (mock)
+    function viewDocument(i) {
+      alert(`Opening ${documents[i].name} in new tab...`);
+    }
+
+    // Approve document
+    function approveDoc(i) {
+      documents[i].status = 'approved';
+      verifiedCount++;
+      renderDocuments();
+      checkAllVerified();
+    }
+
+    // Reject document
+    function rejectDoc(i) {
+      documents[i].status = 'rejected';
+      renderDocuments();
+    }
+
+    // Show OCR result
+    function showOCRResult() {
+      setTimeout(() => {
+        document.getElementById('ocr-result').classList.add('show');
+      }, 1000);
+    }
+
+    // Check if all required docs verified
+    function checkAllVerified() {
+      const required = documents.filter(d => d.ocr).every(d => d.status === 'approved');
+      if (required && verifiedCount >= 2) {
+        document.querySelector('.badge').textContent = 'Ready for Approval';
+        document.querySelector('.badge').className = 'badge badge-approved';
+      }
+    }
+
+    // Finalize verification
+    function finalizeVerification() {
+      const pending = documents.some(d => d.status === 'pending');
+      if (pending) {
+        alert('Please verify all documents first.');
+        return;
+      }
+
+      const rejected = documents.some(d => d.status === 'rejected');
+      if (rejected) {
+        alert('Application rejected due to invalid document.');
+        location.href = 'dashboard.html';
+        return;
+      }
+
+      alert('All documents verified! Proceeding to enrollment...');
+      // In real system: trigger Process 3
+      location.href = '../student/dashboard.html';
+    }
+  </script>
+
+</body>
+</html>
