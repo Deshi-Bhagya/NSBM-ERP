@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* CARDS */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-size: 0.95rem;
+    }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-warning { background: var(--warning); color: white; }
+
+    /* BADGES */
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #d4edda; color: #155724; }
+    .badge-rejected { background: #f8d7da; color: #721c24; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .auth-buttons button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="student/profile.html">Student Portal</a></li>
+          <li><a href="library/dashboard.html">Library</a></li>
+          <li><a href="marketing/dashboard.html">Marketing</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="location.href='register.html'">Register</button>
+                  </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO + LOGIN -->
+  <div class="container" style="display:flex; align-items:center; justify-content:center; gap:3rem; padding:3rem 1rem; flex-wrap:wrap;">
+    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200" 
+         alt="NSBM Campus" style="width:100%; max-width:500px; border-radius:12px; box-shadow:var(--shadow);">
+
+    <div class="card" style="max-width:420px; width:100%;">
+      <h3 style="margin-bottom:1.5rem; color:#222; font-size:1.5rem; text-align:center;">
+        Welcome to NSBM ERP
+      </h3>
+      <p style="margin-bottom:1.5rem; color:#555; text-align:center;">
+        Login to access your portal.
+      </p>
+
+      <form id="loginForm">
+        <div style="margin-bottom:1.2rem;">
+          <label style="display:block; margin-bottom:0.5rem; font-weight:500;">User ID</label>
+          <input type="text" id="username" placeholder="e.g., S12345" 
+                 style="width:100%; padding:0.8rem 1rem; border:1.5px solid var(--border); border-radius:8px;" required />
+        </div>
+
+        <div style="margin-bottom:1.2rem;">
+          <label style="display:block; margin-bottom:0.5rem; font-weight:500;">Password</label>
+          <input type="password" id="password" placeholder="Enter password" 
+                 style="width:100%; padding:0.8rem 1rem; border:1.5px solid var(--border); border-radius:8px;" required />
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+          <label style="display:block; margin-bottom:0.5rem; font-weight:500;">Login As</label>
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <label style="flex:1; min-width:100px;"><input type="radio" name="role" value="student" checked> Student</label>
+            <label style="flex:1; min-width:100px;"><input type="radio" name="role" value="admin"> Admin</label>
+            <label style="flex:1; min-width:100px;"><input type="radio" name="role" value="registrar"> Registrar</label>
+            <label style="flex:1; min-width:100px;"><input type="radio" name="role" value="finance"> Finance</label>
+
+            
+            
+          </div>
+        </div>
+
+        <button type="submit" class="btn" style="background:var(--primary); color:white; width:100%; padding:0.9rem;">
+          Login
+        </button>
+      </form>
+
+      <div style="text-align:center; margin-top:1rem;">
+        <a href="#" style="color:var(--primary); text-decoration:none; font-size:0.9rem;">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+
+  
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+
+	<!-- MODULES INFO -->
+	<div class="container">
+
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University | Business Process Analysis – Group 11
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+
+      if (!username || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      // Save session
+      localStorage.setItem('userID', username);
+      localStorage.setItem('userRole', role);
+      localStorage.setItem('userName', username);
+
+      // Role-based routing
+      const routes = {
+        student: 'student/profile.html',
+        admission: 'admission/dashboard.html',
+        registrar: 'registrar/timetable.html',
+        finance: 'finance/invoice.html',
+        librarian: 'library/dashboard.html',
+        marketing: 'marketing/dashboard.html',
+        admin: 'admin/dashboard.html'
+      };
+
+      if (routes[role]) {
+        location.href = routes[role];
+      } else {
+        alert('Module not available.');
+      }
+    });
+  </script>
+
+</body>
+</html>
