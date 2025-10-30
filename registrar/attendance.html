@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Management | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    select, button {
+      padding: 0.6rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-success { background: var(--success); color: white; }
+    .btn-warning { background: var(--warning); color: white; }
+
+    /* ATTENDANCE TABLE */
+    .attendance-table {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .student-row { background: var(--light); }
+    .student-row:nth-child(even) { background: white; }
+
+    /* ATTENDANCE STATUS */
+    .present { background: var(--success); color: white; }
+    .absent { background: var(--danger); color: white; }
+    .late { background: var(--warning); color: white; }
+
+    /* REPORT BUTTON */
+    .report-btn {
+      padding: 0.5rem 1rem;
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .controls { flex-direction: column; }
+      .container { padding: 1.5rem 1rem; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="timetable.html">Timetable</a></li>
+          <li><a href="attendance.html" class="active">Attendance</a></li>
+          <li><a href="exams.html">Exams</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:0.5rem; color:#222;">Attendance Management</h1>
+    <p style="color:#555; margin-bottom:1.5rem;">Mark attendance and generate weekly/monthly reports.</p>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <select id="course-select">
+        <option value="CS101">CS101 - Introduction to CS</option>
+        <option value="MA101">MA101 - Calculus I</option>
+        <option value="PH101">PH101 - Physics I</option>
+      </select>
+      <select id="date-select">
+        <option value="2024-01-15">Monday, Jan 15, 2024</option>
+        <option value="2024-01-16">Tuesday, Jan 16, 2024</option>
+      </select>
+      <button class="btn-primary" onclick="loadAttendance()">Load</button>
+      <button class="btn-success" onclick="markAllPresent()">Mark All Present</button>
+      <button class="btn-warning" onclick="generateReport()">Generate Report</button>
+    </div>
+
+    <!-- ATTENDANCE TABLE -->
+    <div class="attendance-table">
+      <table id="attendance-table">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- REPORT -->
+    <div id="report" style="margin-top:2rem; display:none;">
+      <h3 style="color:var(--primary);">Attendance Report</h3>
+      <div class="card" style="padding:1.5rem;">
+        <p><strong>Course:</strong> <span id="report-course"></span></p>
+        <p><strong>Date:</strong> <span id="report-date"></span></p>
+        <p><strong>Total Students:</strong> <span id="report-total">0</span></p>
+        <p><strong>Present:</strong> <span id="report-present">0</span></p>
+        <p><strong>Absent:</strong> <span id="report-absent">0</span></p>
+        <p><strong>Attendance %:</strong> <span id="report-percentage">0%</span></p>
+        <button class="report-btn" onclick="downloadReport()">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Sample students
+    const students = [
+      { id: "S12345", name: "Kamal Perera", status: "present" },
+      { id: "S12346", name: "Nimali Silva", status: "absent" },
+      { id: "S12347", name: "Sunil Jayasinghe", status: "present" },
+      { id: "S12348", name: "Amara Gunawardena", status: "late" },
+      { id: "S12349", name: "Rohan Fernando", status: "present" }
+    ];
+
+    // Load attendance
+    function loadAttendance() {
+      const course = document.getElementById('course-select').value;
+      const date = document.getElementById('date-select').value;
+      const tbody = document.querySelector('#attendance-table tbody');
+      
+      tbody.innerHTML = students.map(student => `
+        <tr class="${student.status}">
+          <td>${student.id}</td>
+          <td>${student.name}</td>
+          <td>
+            <span class="badge badge-${student.status}">${student.status.charAt(0).toUpperCase()}</span>
+          </td>
+          <td>${new Date(date).toLocaleTimeString()}</td>
+          <td>
+            <select onchange="updateAttendance('${student.id}', this.value)">
+              <option value="present" ${student.status === 'present' ? 'selected' : ''}>Present</option>
+              <option value="absent" ${student.status === 'absent' ? 'selected' : ''}>Absent</option>
+              <option value="late" ${student.status === 'late' ? 'selected' : ''}>Late</option>
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update attendance
+    function updateAttendance(id, status) {
+      const student = students.find(s => s.id === id);
+      student.status = status;
+      loadAttendance();
+    }
+
+    // Mark all present
+    function markAllPresent() {
+      students.forEach(s => s.status = 'present');
+      loadAttendance();
+    }
+
+    // Generate report
+    function generateReport() {
+      const present = students.filter(s => s.status === 'present').length;
+      const total = students.length;
+      const percentage = ((present / total) * 100).toFixed(1);
+
+      document.getElementById('report-course').textContent = document.getElementById('course-select').selectedOptions[0].text;
+      document.getElementById('report-date').textContent = new Date(document.getElementById('date-select').value).toLocaleDateString();
+      document.getElementById('report-total').textContent = total;
+      document.getElementById('report-present').textContent = present;
+      document.getElementById('report-absent').textContent = total - present;
+      document.getElementById('report-percentage').textContent = `${percentage}%`;
+
+      document.getElementById('report').style.display = 'block';
+    }
+
+    // Download report
+    function downloadReport() {
+      const report = document.getElementById('report').innerHTML;
+      const printWindow = window.open('', '', 'height=600,width=800');
+      printWindow.document.write(`
+        <html>
+          <head><title>Attendance Report</title></head>
+          <body style="margin:0; padding:2rem; font-family:Inter,sans-serif;">
+            <h1>Attendance Report</h1>
+            ${report}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    // Auto-load
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'registrar') {
+        alert('Access denied.');
+        location.href = '../index.html';
+        return;
+      }
+      loadAttendance();
+    };
+  </script>
+
+</body>
+</html>

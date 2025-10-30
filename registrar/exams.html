@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exams Management | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+ /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    :root { --primary: #1a5fb4; --success: #2e7d32; --danger: #c62828; --border: #dee2e6; --radius: 12px; --shadow: 0 8px 25px rgba(0,0,0,0.08); --bg: #f9fbfd; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
+
+    header { background: white; border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; height: 70px; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; color: var(--primary); text-decoration: none; font-size: 1.3rem; }
+    .logo i { font-size: 1.6rem; }
+    .nav-links a { color: #555; text-decoration: none; font-weight: 500; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; flex: 1; }
+
+    .controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    select, button { padding: 0.6rem 1rem; border: 1.5px solid var(--border); border-radius: 8px; }
+    .btn-primary { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; }
+
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    th, td { padding: 0.75rem; text-align: center; border-bottom: 1px solid var(--border); }
+    th { background: #e3f2fd; color: var(--primary); font-weight: 600; }
+
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-enter { background: var(--success); color: white; }
+    .btn-publish { background: #6c757d; color: white; }
+
+    footer { text-align: center; padding: 1.5rem; color: #6c757d; font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: auto; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo"><i class="fas fa-graduation-cap"></i> NSBM ERP</a>
+        <ul class="nav-links">
+          <li><a href="timetable.html">Timetable</a></li>
+          <li><a href="attendance.html">Attendance</a></li>
+          <li><a href="exams.html" class="active">Exams</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:0.5rem; color:#222;">Exam Schedule & Results</h1>
+    <p style="color:#555; margin-bottom:1.5rem;">Schedule exams, allow faculty entry, and publish results.</p>
+
+    <div class="controls">
+      <select id="semester"><option>Semester 1, 2024</option></select>
+      <button class="btn-primary" onclick="generateSchedule()">Generate Schedule</button>
+      <button class="btn-primary" onclick="publishResults()">Publish Results</button>
+    </div>
+
+    <table id="exam-table">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Venue</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">© 2025 NSBM Green University</p>
+    </div>
+  </footer>
+
+  <script>
+    function logout() { localStorage.clear(); location.href = '../index.html'; }
+
+    const exams = [
+      { course: "CS201", date: "2025-01-10", time: "09:00", venue: "A101", status: "scheduled" },
+      { course: "MA201", date: "2025-01-12", time: "14:00", venue: "B203", status: "results-entered" }
+    ];
+
+    window.onload = () => {
+      if (localStorage.getItem('userRole') !== 'registrar') {
+        alert('Access denied.'); location.href = '../index.html'; return;
+      }
+      renderExams();
+    };
+
+    function renderExams() {
+      const tbody = document.querySelector('#exam-table tbody');
+      tbody.innerHTML = exams.map(ex => `
+        <tr>
+          <td>${ex.course}</td>
+          <td>${new Date(ex.date).toLocaleDateString()}</td>
+          <td>${ex.time}</td>
+          <td>${ex.venue}</td>
+          <td><span class="badge badge-${ex.status.split('-').join('')}">${ex.status}</span></td>
+          <td>
+            ${ex.status === 'scheduled' ? `<button class="btn-sm btn-enter" onclick="enterResults('${ex.course}')">Enter Results</button>` : ''}
+            ${ex.status === 'results-entered' ? `<button class="btn-sm btn-publish" onclick="publish('${ex.course}')">Publish</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function generateSchedule() {
+      alert('Exam schedule generated and sent to faculty & students.');
+    }
+
+    function enterResults(course) {
+      alert(`Opening result entry form for ${course}...`);
+      exams.find(e => e.course === course).status = 'results-entered';
+      renderExams();
+    }
+
+    function publish(course) {
+      alert(`Results for ${course} published to student portal.`);
+      exams.find(e => e.course === course).status = 'published';
+      renderExams();
+    }
+
+    function publishResults() {
+      alert('All results published successfully.');
+    }
+  </script>
+</body>
+</html>

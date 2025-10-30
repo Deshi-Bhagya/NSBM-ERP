@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timetable Generator | NSBM ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --primary-light: #e3f2fd;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #f9a825;
+      --border: #dee2e6;
+      --radius: 12px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.08);
+      --bg: #f9fbfd;
+      --text: #333;
+      --muted: #6c757d;
+      --light: #f8f9fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.3rem;
+    }
+    .logo i { font-size: 1.6rem; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); font-weight: 600; }
+    .auth-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    /* TIMETABLE GRID */
+    .timetable {
+      display: grid;
+      grid-template-columns: 100px repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+    .timetable-header, .timetable-cell {
+      background: white;
+      padding: 0.75rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .timetable-header {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .time-slot {
+      background: #f1f3f5;
+      font-weight: 500;
+    }
+    .class-cell {
+      min-height: 60px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .class-cell:hover {
+      background: #e9ecef;
+    }
+    .class-cell.filled {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .class-code { font-weight: 600; }
+    .class-lecturer { font-size: 0.75rem; color: #555; }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    select, button {
+      padding: 0.6rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer-links a {
+      color: var(--muted);
+      margin: 0 0.75rem;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .timetable { grid-template-columns: 80px repeat(5, 1fr); font-size: 0.8rem; }
+      .controls { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="nav-container">
+        <a href="../index.html" class="logo">
+          <i class="fas fa-graduation-cap"></i>
+          NSBM ERP
+        </a>
+        <ul class="nav-links">
+          <li><a href="timetable.html" class="active">Timetable</a></li>
+          <li><a href="attendance.html">Attendance</a></li>
+          <li><a href="exams.html">Exams</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="btn-outline" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 style="font-size:1.8rem; margin-bottom:0.5rem; color:#222;">Timetable & Class Schedule</h1>
+    <p style="color:#555; margin-bottom:1.5rem;">Generate and manage class schedules for all programs.</p>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <select id="program-select">
+        <option value="computing">BSc in Computing</option>
+        <option value="management">BSc in Management</option>
+        <option value="engineering">BSc in Engineering</option>
+      </select>
+      <select id="semester-select">
+        <option value="1">Semester 1</option>
+        <option value="2">Semester 2</option>
+      </select>
+      <button class="btn-primary" onclick="generateTimetable()">Generate Timetable</button>
+      <button class="btn-primary" onclick="notifyStudents()">Notify Students</button>
+    </div>
+
+    <!-- TIMETABLE -->
+    <div class="timetable" id="timetable">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#">Quick Links</a>
+        <a href="#">Support</a>
+        <a href="#">About NSBM</a>
+      </div>
+      <p style="margin-top:1rem;">
+        © 2025 NSBM Green University
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.clear();
+      location.href = '../index.html';
+    }
+
+    // Time slots
+    const timeSlots = [
+      "08:00 - 09:30",
+      "09:40 - 11:10",
+      "11:20 - 12:50",
+      "13:00 - 14:30",
+      "14:40 - 16:10"
+    ];
+
+    // Sample courses
+    const courses = {
+      computing: [
+        { code: "CS101", name: "Intro to CS", lecturer: "Dr. Silva", room: "A101" },
+        { code: "CS201", name: "Data Structures", lecturer: "Prof. Perera", room: "B203" },
+        { code: "MA101", name: "Calculus I", lecturer: "Ms. Fernando", room: "C104" }
+      ],
+      management: [
+        { code: "MG101", name: "Principles of Mgmt", lecturer: "Dr. Jayasinghe", room: "D201" },
+        { code: "AC101", name: "Accounting", lecturer: "Mr. Gunawardena", room: "E105" }
+      ],
+      engineering: [
+        { code: "EN101", name: "Mechanics", lecturer: "Prof. Ranatunga", room: "F301" }
+      ]
+    };
+
+    // Generate timetable
+    function generateTimetable() {
+      const program = document.getElementById('program-select').value;
+      const semester = document.getElementById('semester-select').value;
+      const timetable = document.getElementById('timetable');
+      timetable.innerHTML = '';
+
+      // Header
+      const days = ['Time', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      days.forEach((day, i) => {
+        const header = document.createElement('div');
+        header.className = 'timetable-header';
+        header.textContent = day;
+        timetable.appendChild(header);
+      });
+
+      // Rows
+      timeSlots.forEach((slot, row) => {
+        // Time slot
+        const timeCell = document.createElement('div');
+        timeCell.className = 'timetable-cell time-slot';
+        timeCell.textContent = slot;
+        timetable.appendChild(timeCell);
+
+        // Days
+        for (let col = 1; col <= 5; col++) {
+          const cell = document.createElement('div');
+          cell.className = 'timetable-cell class-cell';
+
+          // Randomly assign a course
+          if (Math.random() > 0.5 && courses[program].length > 0) {
+            const course = courses[program][Math.floor(Math.random() * courses[program].length)];
+            cell.classList.add('filled');
+            cell.innerHTML = `
+              <div class="class-code">${course.code}</div>
+              <div class="class-lecturer">${course.lecturer}</div>
+              <div class="class-room">${course.room}</div>
+            `;
+          }
+
+          timetable.appendChild(cell);
+        }
+      });
+
+      alert(`Timetable generated for ${program.toUpperCase()} - Semester ${semester}!`);
+    }
+
+    // Notify students
+    function notifyStudents() {
+      alert('All students have been notified via email & portal.');
+    }
+
+    // Auto-generate on load
+    window.onload = () => {
+      const role = localStorage.getItem('userRole');
+      if (role !== 'registrar') {
+        alert('Access denied. Registrar only.');
+        location.href = '../index.html';
+        return;
+      }
+      generateTimetable();
+    };
+  </script>
+
+</body>
+</html>
