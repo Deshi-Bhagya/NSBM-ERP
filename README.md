@@ -52,3 +52,38 @@ NSBM_ERP/
 │   │   ├── payment.html
 │   │   ├── profile.html
 │   │   ├── results.html
+
+
+
+---
+
+## 🚀 Features
+
+### 👨‍🎓 Student Module
+- View enrolled courses, results, and payments  
+- Manage student profile and ID card  
+- Check attendance and exam schedules  
+
+### 🧑‍💼 Admin Module
+- Manage users, admissions, and verifications  
+- Generate analytical and admission reports  
+- Dashboard for overall system overview  
+
+### 🧾 Registrar Module
+- Manage attendance, exam schedules, and timetables  
+- Allocate subjects and departments  
+- Monitor student academic progress  
+
+### 💰 Finance Module
+- Generate invoices and manage scholarships  
+- Track payments and balances  
+- Produce financial reports  
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/<your-username>/NSBM-ERP.git
+   cd NSBM-ERP
