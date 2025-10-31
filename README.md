@@ -1,6 +1,6 @@
 # 🎓 NSBM ERP (Enterprise Resource Platform)
 
-![NSBM ERP Preview](https://via.placeholder.com/1200x600.png?text=NSBM+ERP+Live+Preview)  
+
 *Live Demo: [nsbm-erp.vercel.app](https://nsbm-erp.vercel.app)*
 
 A web-based **ERP system for NSBM Green University** that integrates core university operations such as **Student Management**, **Admissions**, **Finance**, and **Registrar activities** — designed for **simplicity**, **efficiency**, and **scalability**.
