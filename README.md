@@ -3,9 +3,9 @@
 
 *Live Demo: [nsbm-erp.vercel.app](https://nsbm-erp.vercel.app)*
 
-The Student Registration System is the backbone of university enrollment management. It handles 
+*The Student Registration System is the backbone of university enrollment management. It handles 
 admission applications, profile creation, document verification, and course registration. By automating fee 
-calculation, payment collection, and timetable generation.
+calculation, payment collection, and timetable generation.*
 ---
 
 ## 🌟 Live Demo
