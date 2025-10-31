@@ -1,4 +1,4 @@
-## Student Information Management - UI Design & Documentation
+## 🎓 Student Information Management - UI Design & Documentation
 
 
 *Live Demo: [nsbm-erp.vercel.app](https://nsbm-erp.vercel.app)*
