@@ -20,7 +20,7 @@ calculation, payment collection, and timetable generation.
 
 ## Business Processes
 
-**High-Level Business Processes for the Entire ERP System**
+#High-Level Business Processes for the Entire ERP System
 
 1. New student admission.  
 •  Collect student applications, Verify documents, If documents valid proceed to enrollment, 
