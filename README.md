@@ -20,7 +20,7 @@ calculation, payment collection, and timetable generation.
 
 ## Business Processes
 
-#High-Level Business Processes for the Entire ERP System
+*High-Level Business Processes for the Entire ERP System*
 
 1. New student admission.  
 •  Collect student applications, Verify documents, If documents valid proceed to enrollment, 
@@ -78,7 +78,7 @@ before deadline apply late fee penalty.
 •  Collect student feedback through portal, Categorize feedback or complaint, Assign to the 
 department responsible.
 
-**Sub-Processes (Step-by-Step Workflow)**
+*Sub-Processes (Step-by-Step Workflow)*
 
 1. Submit admission application → Upload required documents  
 2. Verify eligibility → (if approved, continue; if rejected, notify student)  
