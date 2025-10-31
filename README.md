@@ -65,9 +65,9 @@ NSBM_ERP/
 │   │   ├── payment.html
 │   │   ├── profile.html
 │   │   ├── results.html
+|
+```
 
-
-```plaintext
 
 
 ## 🚀 Features
@@ -100,3 +100,12 @@ NSBM_ERP/
    ```bash
    git clone https://github.com/<your-username>/NSBM-ERP.git
    cd NSBM-ERP
+
+2. **Open directly in browser**
+   ```bash
+   open "NSBM ERP/index.html"
+   
+3.**Or use a local server:**
+    ```bash
+    npx serve "NSBM ERP"
+    
